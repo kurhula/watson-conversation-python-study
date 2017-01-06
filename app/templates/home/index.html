@@ -1,0 +1,60 @@
+{% extends "shared/layout.html" %} {% block content %}
+<div class="container">
+    <div class="row" id="messages"></div>
+    <div class="row">
+        <div class="col col-xs-12">
+            <form>
+                <input type="text" id="message" />
+                <button class="btn btn-danger" id="send">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("form").on("submit", function () {
+            var data = {
+                id: 1,
+                message: $("#message").val()
+            };
+            $("#message").val("")
+            $.ajax({
+                url: "/api/message",
+                method: "POST",
+                type: "json",
+                data: JSON.stringify(data),
+            })
+            .done(function (response) {
+                $("div#messages").append("<div class='col col-xs-offset-6 col-xs-6 me'>" + data.message + "</div>");
+                $("div#messages").append("<div class='col col-xs-6 bot'>" + response + "</div>");
+            })
+            .fail(function (err) {
+                alert(err)
+            })
+            return false;
+        });
+    })
+</script>
+<style>
+
+#messages div{
+    padding:10px;
+    margin:10px;
+}
+form input{
+    width:100%;
+}
+form button{
+    float:right;
+    margin-top: 5px;
+}
+.me{
+    background-color: lightgreen;
+    float:right;
+}
+.bot{
+    background-color: lightblue;
+    float:left;
+}
+</style>
+{% endblock %}
