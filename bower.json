@@ -1,0 +1,22 @@
+{
+  "name": "watson-conversation-python-study",
+  "homepage": "https://github.com/psbds/watson-conversation-python-study",
+  "authors": [
+    "Paulo Baima <psfilho@br.ibm.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "boostrap#^3.3.7",
+    "mustache.js": "mustache#^2.3.0"
+  }
+}

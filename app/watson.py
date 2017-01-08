@@ -21,6 +21,12 @@ def sendMessage(context_id, message):
         message_input={'text': message},
         context=context
     )
+    
     if not(contextExists):
         contexts[context_id] = response["context"]
-    return response["output"]["text"][0];
+
+    return {
+        "text": response["output"]["text"][0],
+        "intents":  response["intents"],
+        "entities": response["entities"]
+    }

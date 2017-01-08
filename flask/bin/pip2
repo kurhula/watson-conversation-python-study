@@ -1,4 +1,4 @@
-#!/Users/paulobaima/python-study/microblog/flask/bin/python
+#!/Users/paulobaima/watson-conversation-python-study/flask/bin/python
 
 # -*- coding: utf-8 -*-
 import re

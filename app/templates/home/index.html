@@ -6,55 +6,225 @@
             <form>
                 <input type="text" id="message" />
                 <button class="btn btn-danger" id="send">Send</button>
+                <button class="btn btn-danger pull-left" id="showScores">List Scores</button>
             </form>
         </div>
     </div>
 </div>
+
+<div class="modal modal-scores">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Scores</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="bot-message-tmpl" type="x-tmpl-mustache">
+    <div class='col col-xs-6 bot chat-message'>
+        <span>{M message M}</span>
+        </br>
+        <button class="btn btn-danger btn-sm pull-right score" data-input-text="{M inputText M}" data-message="{M message M}" data-score="-1" data-intents="{M intents M}" data-entities="{M entities M}">
+            <i class="glyphicon glyphicon-thumbs-down"></i>
+        </button>
+        <button class="btn btn-success btn-sm pull-right score" data-input-text="{M inputText M}" data-message="{M message M}" data-score="1" data-intents="{M intents M}" data-entities="{M entities M}">
+            <i class="glyphicon glyphicon-thumbs-up"></i>
+        </button>
+    </div>
+</script>
+
+<script id="my-message-tmpl" type="x-tmpl-mustache">
+    <div class='col col-xs-offset-6 col-xs-6 me  chat-message'>
+        <span>{M message M}</span>
+        {M#intents M}
+        </br>
+        {M/intents M}
+        {M#intents M}
+        <small class='intent'>#{M intent M}: {M confidence M}</small>
+        {M/intents M}
+        {M#entities M}
+        {M/entities M}
+        {M#entities M}
+        <small class='entity'>@{M entity M}: {M value M}</small>
+        {M/entities M}
+    </div>
+</script>
+
+<script id="scores-tmpl" type="x-tmpl-mustache">
+    <table class="table table-hover">
+        <thead>
+            <td>Score</td>
+            <td>Input</td>
+            <td>Response</td>
+            <td>Intents</td>
+            <td>Entities</td>
+        </thead>
+        <tbody>
+            {M#scores M}
+            <tr class="score-row {M#scoreType M} {M score M} {M/scoreType M}">
+                <td>
+                    {M score M}
+                </td>
+                <td> {M inputText M}</td>
+                <td> {M message M}</td>
+                <td>
+                {M# intents M}
+                    <span>#{M intent M}: {M confidence M}</span>
+                {M/intents M}
+                </td>
+                <td>
+                {M# entities M}
+                    <span>@{M entity M}: {M value M}</span>
+                {M/entities M}
+                </td>
+                
+            </tr>
+            {M/scores M}
+        </tbody>
+    </table>
+</script>
+
 <script>
-    $(document).ready(function () {
-        $("form").on("submit", function () {
-            var data = {
-                id: 1,
-                message: $("#message").val()
-            };
-            $("#message").val("")
-            $.ajax({
-                url: "/api/message",
-                method: "POST",
-                type: "json",
-                data: JSON.stringify(data),
-            })
+
+    function sendMessage(message, successCallback, errorCallback) {
+        var postData = {
+            id: 1,
+            message: message
+        };
+        $.ajax({
+            url: "/api/message",
+            method: "POST",
+            type: "json",
+            data: JSON.stringify(postData),
+            dataType: "json"
+        })
             .done(function (response) {
-                $("div#messages").append("<div class='col col-xs-offset-6 col-xs-6 me'>" + data.message + "</div>");
-                $("div#messages").append("<div class='col col-xs-6 bot'>" + response + "</div>");
+                addMyMessage(response, postData.message);
+                addBotMessage(response.text, postData.message, response.intents, response.entities);
+                if (successCallback)
+                    successCallback();
             })
             .fail(function (err) {
                 alert(err)
+                if (errorCallback)
+                    errorCallback();
             })
+    }
+
+    function addMyMessage(data, inputText) {
+        var template = $('#my-message-tmpl').html();
+        Mustache.parse(template);
+        var rendered = Mustache.render(template, { message: inputText, intents: data.intents, entities: data.entities });
+        $("div#messages").append(rendered);
+    }
+
+    function addBotMessage(message, inputText, intents, entities) {
+        var template = $('#bot-message-tmpl').html();
+        Mustache.parse(template);
+
+        var rendered = Mustache.render(template, {
+            message: message,
+            inputText: inputText,
+            intents: JSON.stringify(intents),
+            entities: JSON.stringify(entities)
+        });
+        $("div#messages").append(rendered);
+    }
+
+    function scoreMessage(inputText, message, intents, entities, score, successCallback, errorCallback) {
+        var postData = {
+            message: message,
+            inputText: inputText,
+            intents: intents,
+            entities: entities,
+            score: score
+        };
+        $.ajax({
+            url: "/api/score",
+            method: "POST",
+            type: "json",
+            data: JSON.stringify(postData),
+        })
+            .done(function (response) {
+                successCallback();
+            })
+            .fail(function (err) {
+                alert(err);
+                errorCallback();
+            })
+    }
+
+    function showScores(scores) {
+        var template = $('#scores-tmpl').html();
+        Mustache.parse(template);
+        var rendered = Mustache.render(template, {
+            scores: scores,
+            scoreType: function () {
+                return function (score, render) {
+                    return render(score) > 0 ? 'positive' : 'negative';
+                }
+            }
+        });
+        $(".modal-scores .modal-body").html(rendered);
+        $(".modal-scores").modal("show");
+    }
+
+    $(document).ready(function () {
+        $("form").on("submit", function () {
+            var message = $("#message").val();
+            if (message) {
+                $("#message").prop("disabled", true);
+                sendMessage(message, function () {
+                    $("#message").prop("disabled", false);
+                    $("#message").val("");
+                }, function () {
+                    $("#message").prop("disabled", false);
+                })
+            }
             return false;
         });
-    })
-</script>
-<style>
 
-#messages div{
-    padding:10px;
-    margin:10px;
-}
-form input{
-    width:100%;
-}
-form button{
-    float:right;
-    margin-top: 5px;
-}
-.me{
-    background-color: lightgreen;
-    float:right;
-}
-.bot{
-    background-color: lightblue;
-    float:left;
-}
-</style>
+        $(".container").on("click", ".score", function () {
+            var parentContainer = $(this).parent(".chat-message");
+            var inputText = $(this).data("input-text");
+            var message = $(this).data("message");
+            var intents = $(this).data("intents");
+            var entities = $(this).data("entities");
+            var score = $(this).data("score");
+
+            parentContainer.find(".score").prop("disabled", true);
+
+            scoreMessage(inputText, message, intents, entities, score, function () {
+                parentContainer.find(".score").remove();
+            }, function () {
+                parentContainer.find(".score").prop("disabled", false);
+            });
+        })
+
+        $("#showScores").on("click", function () {
+            $.ajax({
+                url: "/api/score",
+                method: "GET",
+                dataType: "json"
+            })
+                .done(function (response) {
+                    showScores(response);
+                })
+                .fail(function (err) {
+                    alert(err);
+                })
+        });
+
+    });
+</script>
+
 {% endblock %}

@@ -1,13 +1,13 @@
+{# from flask import url_for #}
 <html>
 
 <head>
     <title>Conversation Test </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
-    <link href="https://bootswatch.com/united/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+    <link href="{{ url_for('static', filename = 'lib/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'css/style.css')}}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename ='lib/jquery/dist/jquery.min.js')}}" ></script>
+    <script src="{{ url_for('static', filename = 'lib/bootstrap/dist/js/bootstrap.js')}}"></script>
+    <script src="{{ url_for('static', filename = 'lib/mustache.js/mustache.js')}}"></script>
 </head>
 
 <body>
@@ -25,6 +25,10 @@
         </div>
     </nav>
     {% block content %}{% endblock %}
+<script>
+Mustache.tags = ['{M','M}'];
+
+</script>
 </body>
 
 </html>
