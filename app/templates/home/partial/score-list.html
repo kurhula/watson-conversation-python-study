@@ -1,0 +1,110 @@
+<a href="#" id="showScores">List Scores</a>
+
+<div class="modal modal-scores">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Scores</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="scores-tmpl" type="x-tmpl-mustache">
+    <div class="row text-right">   
+        <div class="col col-xs-12">
+            <button id="allScores" class="filter-score active btn btn-default">All</button>
+            <button id="positiveScores" class="filter-score btn btn-default">Positive</button>
+            <button id="negativeScores" class="filter-score btn btn-default">Negative</button>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <td>Score</td>
+            <td>Input</td>
+            <td>Response</td>
+            <td>Intents</td>
+            <td>Entities</td>
+        </thead>
+        <tbody>
+            {M#scores M}
+            <tr class="score-row {M#scoreType M} {M score M} {M/scoreType M}">
+                <td>
+                    {M score M}
+                </td>
+                <td> {M inputText M}</td>
+                <td> {M message M}</td>
+                <td>
+                {M# intents M}
+                    <span>#{M intent M}: {M confidence M}</span>
+                {M/intents M}
+                </td>
+                <td>
+                {M# entities M}
+                    <span>@{M entity M}: {M value M}</span>
+                {M/entities M}
+                </td>
+                
+            </tr>
+            {M/scores M}
+        </tbody>
+    </table>
+</script>
+
+<script>
+    function showScores(scores) {
+        var template = $('#scores-tmpl').html();
+        Mustache.parse(template);
+        var rendered = Mustache.render(template, {
+            scores: scores,
+            scoreType: function () {
+                return function (score, render) {
+                    return render(score) > 0 ? 'positive' : 'negative';
+                }
+            }
+        });
+        $(".modal-scores .modal-body").html(rendered);
+        $(".modal-scores").modal("show");
+    }
+
+    $(document).ready(function () {
+        $(".modal-scores").on("click", ".filter-score", function () {
+            var id = this.id;
+            $(".filter-score").removeClass("active");
+            $("#" + id).addClass("active")
+            switch (id) {
+                case "allScores":
+                    $(".score-row").show();
+                    break;
+                case "positiveScores":
+                    $(".score-row").not(".positive").hide();
+                    $(".score-row.positive").show();
+                    break;
+                case "negativeScores":
+                    $(".score-row").not(".negative").hide();
+                    $(".score-row.negative").show();
+                    break;
+            }
+        });
+
+        $("#showScores").on("click", function () {
+            $.ajax({
+                url: "/api/score",
+                method: "GET",
+                dataType: "json"
+            })
+                .done(function (response) {
+                    showScores(response);
+                })
+                .fail(function (err) {
+                    alert(err);
+                })
+        });
+    })
+</script>

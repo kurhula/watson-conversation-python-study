@@ -5,7 +5,7 @@
     <title>Conversation Test </title>
     <link href="{{ url_for('static', filename = 'lib/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet" />
     <link href="{{ url_for('static', filename = 'css/style.css')}}" rel="stylesheet" />
-    <script src="{{ url_for('static', filename ='lib/jquery/dist/jquery.min.js')}}" ></script>
+    <script src="{{ url_for('static', filename ='lib/jquery/dist/jquery.min.js')}}"></script>
     <script src="{{ url_for('static', filename = 'lib/bootstrap/dist/js/bootstrap.js')}}"></script>
     <script src="{{ url_for('static', filename = 'lib/mustache.js/mustache.js')}}"></script>
 </head>
@@ -22,11 +22,17 @@
                 </button>
                 <a class="navbar-brand" href="#">Conversation Python Study</a>
             </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">{% include "home/partial/score-list.html" %}</li>
+                </ul>
+            </div>
+
         </div>
     </nav>
     {% block content %}{% endblock %}
-<script>
-Mustache.tags = ['{M','M}'];
+    <script>
+    Mustache.tags = ['{M', 'M}'];
 
 </script>
 </body>

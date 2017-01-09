@@ -6,25 +6,8 @@
             <form>
                 <input type="text" id="message" />
                 <button class="btn btn-danger" id="send">Send</button>
-                <button class="btn btn-danger pull-left" id="showScores">List Scores</button>
             </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal modal-scores">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Scores</h4>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -57,40 +40,6 @@
         <small class='entity'>@{M entity M}: {M value M}</small>
         {M/entities M}
     </div>
-</script>
-
-<script id="scores-tmpl" type="x-tmpl-mustache">
-    <table class="table table-hover">
-        <thead>
-            <td>Score</td>
-            <td>Input</td>
-            <td>Response</td>
-            <td>Intents</td>
-            <td>Entities</td>
-        </thead>
-        <tbody>
-            {M#scores M}
-            <tr class="score-row {M#scoreType M} {M score M} {M/scoreType M}">
-                <td>
-                    {M score M}
-                </td>
-                <td> {M inputText M}</td>
-                <td> {M message M}</td>
-                <td>
-                {M# intents M}
-                    <span>#{M intent M}: {M confidence M}</span>
-                {M/intents M}
-                </td>
-                <td>
-                {M# entities M}
-                    <span>@{M entity M}: {M value M}</span>
-                {M/entities M}
-                </td>
-                
-            </tr>
-            {M/scores M}
-        </tbody>
-    </table>
 </script>
 
 <script>
@@ -163,21 +112,7 @@
             })
     }
 
-    function showScores(scores) {
-        var template = $('#scores-tmpl').html();
-        Mustache.parse(template);
-        var rendered = Mustache.render(template, {
-            scores: scores,
-            scoreType: function () {
-                return function (score, render) {
-                    return render(score) > 0 ? 'positive' : 'negative';
-                }
-            }
-        });
-        $(".modal-scores .modal-body").html(rendered);
-        $(".modal-scores").modal("show");
-    }
-
+ 
     $(document).ready(function () {
         $("form").on("submit", function () {
             var message = $("#message").val();
@@ -209,20 +144,6 @@
                 parentContainer.find(".score").prop("disabled", false);
             });
         })
-
-        $("#showScores").on("click", function () {
-            $.ajax({
-                url: "/api/score",
-                method: "GET",
-                dataType: "json"
-            })
-                .done(function (response) {
-                    showScores(response);
-                })
-                .fail(function (err) {
-                    alert(err);
-                })
-        });
 
     });
 </script>

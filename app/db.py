@@ -2,7 +2,6 @@ from pymongo import Connection
 from app import config
 conn = Connection('localhost', 27017)
     
-messages = []
 def getDbConnection():
     db = conn[config.get("MongoDb", "DATABASE")]
     return db
