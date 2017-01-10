@@ -26,7 +26,7 @@ def sendMessage(context_id, message):
         contexts[context_id] = response["context"]
 
     return {
-        "text": response["output"]["text"][0],
+        "text": "\n".join(response["output"]["text"]),
         "intents":  response["intents"],
         "entities": response["entities"]
     }

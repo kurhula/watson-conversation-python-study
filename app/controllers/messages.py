@@ -5,7 +5,6 @@ from bson import json_util
 
 module = Blueprint('messages', __name__, url_prefix='/api/message')
 
-
 @module.route('', methods=["GET", "POST"])
 def message():
     jsonRequest = request.get_json(force=True)

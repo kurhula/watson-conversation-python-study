@@ -6,6 +6,20 @@ form button{
     float:right;
     margin-top: 5px;
 }
+.container{
+    position: relative;
+}
+
+#messages{
+    margin-bottom: 60px;
+}
+
+#input{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
 .chat-message {
     border-radius: 15px;
     padding:10px;
