@@ -46,13 +46,12 @@
 
     function sendMessage(message, successCallback, errorCallback) {
         var postData = {
-            id: 1,
+            id: Math.floor((Math.random() * 999999) + 1),
             message: message
         };
         $.ajax({
             url: "/api/message",
             method: "POST",
-            type: "json",
             data: JSON.stringify(postData),
             dataType: "json"
         })
