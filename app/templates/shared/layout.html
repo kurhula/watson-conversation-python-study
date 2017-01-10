@@ -3,11 +3,22 @@
 
 <head>
     <title>Conversation Test </title>
-    <link href="{{ url_for('static', filename = 'lib/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet" />
-    <link href="{{ url_for('static', filename = 'css/style.css')}}" rel="stylesheet" />
-    <script src="{{ url_for('static', filename ='lib/jquery/dist/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static', filename = 'lib/bootstrap/dist/js/bootstrap.js')}}"></script>
-    <script src="{{ url_for('static', filename = 'lib/mustache.js/mustache.js')}}"></script>
+
+    <!-- build:css /static/styles.css -->
+
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <!-- endbuild -->
+
+    <!-- build:js /static/scripts.js -->
+
+    <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="static/bower_components/mustache.js/mustache.js"></script>
+
+    <!-- endbuild -->
+
 </head>
 
 <body>
@@ -32,9 +43,9 @@
     </nav>
     {% block content %}{% endblock %}
     <script>
-    Mustache.tags = ['{M', 'M}'];
+        Mustache.tags = ['{M', 'M}'];
 
-</script>
+    </script>
 </body>
 
 </html>

@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 
 virtualenv
+node_modules
+bower_components
+build

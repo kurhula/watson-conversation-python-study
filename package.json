@@ -1,0 +1,19 @@
+{
+  "name": "watson-conversation-python-study",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/psbds/watson-conversation-python-study.git",
+  "author": "Paulo Baima <psfilho@br.ibm.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-css": "^0.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^7.1.2",
+    "gulp-shell": "^0.5.2",
+    "gulp-usemin": "^0.3.27",
+    "run-sequence": "^1.2.2",
+    "yargs": "^6.6.0"
+  }
+}
