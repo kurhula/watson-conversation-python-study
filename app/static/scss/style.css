@@ -1,0 +1,40 @@
+form input {
+  width: 100%; }
+
+form button {
+  float: right;
+  margin-top: 5px; }
+
+.chat-message {
+  border-radius: 15px;
+  padding: 10px;
+  margin: 10px; }
+
+.me {
+  background-color: lightgreen;
+  float: right; }
+
+.bot {
+  background-color: lightblue;
+  float: left; }
+
+.bot .btn {
+  margin-left: 3px; }
+
+.intent {
+  background: antiquewhite;
+  padding: 3px;
+  margin: 3px;
+  float: left; }
+
+.entity {
+  background: deepskyblue;
+  padding: 3px;
+  margin: 3px;
+  float: left; }
+
+.score-row.positive {
+  background-color: lightgreen; }
+
+.score-row.negative {
+  background-color: lightpink; }

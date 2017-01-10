@@ -6,8 +6,8 @@
 
     <!-- build:css /static/styles.css -->
 
-    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="static/scss/style.css" />
 
     <!-- endbuild -->
 
@@ -35,7 +35,7 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active">{% include "home/partial/score-list.html" %}</li>
+                    <li class="active">{% include "scores/partial/score-list.html" %}</li>
                 </ul>
             </div>
 
@@ -44,7 +44,6 @@
     {% block content %}{% endblock %}
     <script>
         Mustache.tags = ['{M', 'M}'];
-
     </script>
 </body>
 
